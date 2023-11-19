@@ -20,7 +20,7 @@ public class Withdrawal {
             if (account.getBalance().compareTo(value) >= 0){
                 BigDecimal newBalance = account.getBalance().subtract(value);
                 account.setBalance(newBalance);
-                accountGateway.updateAccount(account);
+                accountGateway.save(account);
             } else {
                 throw new IllegalArgumentException("The balance is lower than the amount you wish to withdraw");
             }

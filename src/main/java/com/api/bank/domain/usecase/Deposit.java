@@ -21,7 +21,7 @@ public class Deposit {
         }
         BigDecimal newBalance = account.getBalance().add(amount);
         account.setBalance(newBalance);
-        accountGateway.updateAccount(account);
+        accountGateway.save(account);
         return account.getBalance();
     }
 }

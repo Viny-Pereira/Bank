@@ -17,7 +17,7 @@ public class UpdateAccount {
             // - se possuir vamos lancar uma exception
             throw new Exception("User not found");
         }
-        accountGateway.updateAccount(updateAccount);
+        accountGateway.save(updateAccount);
 
     }
 }

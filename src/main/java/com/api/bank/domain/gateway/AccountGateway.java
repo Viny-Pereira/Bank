@@ -2,11 +2,12 @@ package com.api.bank.domain.gateway;
 
 import com.api.bank.domain.model.Account;
 
+import java.util.Optional;
+
 public interface AccountGateway {
     Account searchByCpf(String cpf);
-    Account findById(Long id);
+    Optional<Account> findById(Long id);
     Account save(Account account);
-    void updateAccount(Account account);
     void delete(Long id);
 }
 

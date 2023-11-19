@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -30,7 +31,7 @@ public class DeleteAccountTest {
         Long accountId = 1231L;
         Account existingAccount = new Account(1231L, 0002L, 1L,
                 BigDecimal.valueOf(10000), "Ligia", "12312445212");
-        when(accountGateway.findById(accountId)).thenReturn(existingAccount);
+        when(accountGateway.findById(accountId)).thenReturn(Optional.of(existingAccount));
 
         // Act
         deleteAccount.delete(accountId);
@@ -47,6 +48,6 @@ public class DeleteAccountTest {
         when(accountGateway.findById(nonExistingAccountId)).thenReturn(null);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> deleteAccount.delete(nonExistingAccountId));
+        assertThrows(NullPointerException.class, () -> deleteAccount.delete(nonExistingAccountId));
     }
 }

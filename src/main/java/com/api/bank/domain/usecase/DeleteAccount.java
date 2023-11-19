@@ -3,6 +3,8 @@ package com.api.bank.domain.usecase;
 import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
 
+import java.util.Optional;
+
 public class DeleteAccount {
     private final AccountGateway accountGateway;
 
@@ -10,13 +12,13 @@ public class DeleteAccount {
         this.accountGateway = accountGateway;
     }
 
-    public void delete(Long accountId) throws Exception {
-        Account existingAccount = accountGateway.findById(accountId);
+    public void delete(Long accountId){
+        Optional<Account> existingAccount = accountGateway.findById(accountId);
 
-        if (existingAccount != null) {
-            accountGateway.delete(existingAccount.getId());
+        if (existingAccount.isPresent()) {
+            accountGateway.delete(existingAccount.get().getId());
         } else {
-            throw new IllegalArgumentException("Account not found");
+            throw new NullPointerException("Account not found");
         }
     }
 }

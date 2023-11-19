@@ -46,7 +46,7 @@ public class UpdateAccountTest {
                 BigDecimal.valueOf(10000), "Pedro", "12312445212");
         updateAccount.execute(updatedAccount);
 
-        verify(accountGateway).updateAccount(updatedAccount);
+        verify(accountGateway).save(updatedAccount);
 
     }
 }
