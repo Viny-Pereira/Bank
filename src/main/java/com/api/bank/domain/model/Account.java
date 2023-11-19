@@ -46,11 +46,8 @@ public class Account {
         this.typeAccount = TypeAccount.CC;
     }
 
-    public Account(Long id, Long agency, Long digit, BigDecimal balance, TypeAccount typeAccount, String owner, String cpf) {
-        this.id = id;
-        this.agency = agency;
-        this.digit = digit;
-        this.balance = balance;
+    public Account(TypeAccount typeAccount, String owner, String cpf) {
+        this();
         this.typeAccount = typeAccount;
         this.owner = owner;
         this.cpf = cpf;

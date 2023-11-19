@@ -25,9 +25,13 @@ public class AccountRepository implements AccountGateway {
     @Override
     public Account save(Account account) {
         if (account.getId()==null){
+            springAccountRepository.save(account);
             return account;
+        } else{
+            springAccountRepository.save(account);
+            return account;
+
         }
-        return account;
     }
 
     @Override
