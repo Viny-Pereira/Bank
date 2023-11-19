@@ -4,9 +4,7 @@ package com.api.bank.domain.usercase;
 import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
 import com.api.bank.domain.usecase.CreateNewAccount;
-import com.api.bank.domain.usecase.Withdrawal;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
