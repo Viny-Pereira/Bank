@@ -1,14 +1,22 @@
 package com.api.bank.infra.controller;
 
+import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
 import com.api.bank.domain.model.TypeAccount;
 import com.api.bank.infra.gateway.bd.AccountRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/account")
 public class AccountController {
-    AccountRepository accountRepository;
+
+    private final AccountGateway accountRepository;
+
+    public AccountController(AccountGateway accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @PostMapping
     public Account createAccount(@RequestParam TypeAccount typeAccount,

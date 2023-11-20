@@ -2,9 +2,11 @@ package com.api.bank.infra.gateway.bd;
 
 import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class AccountRepository implements AccountGateway {
     private final SpringAccountRepository springAccountRepository;
 
