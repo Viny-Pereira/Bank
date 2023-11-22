@@ -33,7 +33,7 @@ public class Account {
     @Column(name="OWNER")
     private String owner;
 
-    @Column(name = "CPF")
+    @Column(name = "CPF", unique = true)
     private String cpf;
 
     public Account(Long id, Long agency, Long digit, BigDecimal balance, String owner, String cpf) {
@@ -54,6 +54,21 @@ public class Account {
     }
 
     public Account() {
+        this.agency = 001L;
+        this.digit = 005L;
+        balance = BigDecimal.ZERO;
+    }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", agency=" + agency +
+                ", digit=" + digit +
+                ", balance=" + balance +
+                ", typeAccount=" + typeAccount +
+                ", owner='" + owner + '\'' +
+                ", cpf='" + cpf + '\'' +
+                '}';
     }
 }

@@ -4,6 +4,7 @@ import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -40,5 +41,10 @@ public class AccountRepository implements AccountGateway {
     public void delete(Long id) {
         // todo
 
+    }
+
+    @Override
+    public List<Account> getAll() {
+        return springAccountRepository.findAll();
     }
 }

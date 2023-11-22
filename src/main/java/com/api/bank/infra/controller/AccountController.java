@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -18,6 +20,15 @@ public class AccountController {
         this.accountRepository = accountRepository;
     }
 
+    @GetMapping("{id}")
+    public Account getAccount(@PathVariable Long id){
+        return accountRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @GetMapping
+    public List<Account> getAccount(){
+        return accountRepository.getAll();
+    }
     @PostMapping
     public Account createAccount(@RequestParam TypeAccount typeAccount,
                                  @RequestParam String name,
