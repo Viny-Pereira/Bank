@@ -1,4 +1,4 @@
-package com.api.bank.domain.model;
+package com.api.bank.domain.model.enuns;
 
 public enum TypeAccount {
     CC,

@@ -11,5 +11,6 @@ public interface AccountGateway {
     Account save(Account account);
     void delete(Long id);
     List<Account> getAll();
+    Optional<Account> getAccountTransactions(Long accountId);
 }
 

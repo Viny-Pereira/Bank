@@ -3,9 +3,11 @@ package com.api.bank.domain.usecase;
 import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
 import com.api.bank.infra.gateway.bd.AccountRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-
+@Component
 public class Transfer {
     private final AccountGateway repository;
     private final Withdrawal withdrawal;

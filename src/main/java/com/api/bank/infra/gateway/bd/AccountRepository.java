@@ -47,4 +47,9 @@ public class AccountRepository implements AccountGateway {
     public List<Account> getAll() {
         return springAccountRepository.findAll();
     }
+
+    @Override
+    public Optional<Account> getAccountTransactions(Long accountId) {
+        return springAccountRepository.findById(accountId);
+    }
 }

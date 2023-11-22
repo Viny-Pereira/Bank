@@ -1,10 +1,14 @@
 package com.api.bank.domain.model;
 
+import com.api.bank.domain.model.enuns.TransactionHistory;
+import com.api.bank.domain.model.enuns.TypeAccount;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,6 +39,9 @@ public class Account {
 
     @Column(name = "CPF", unique = true)
     private String cpf;
+
+    @OneToMany(mappedBy = "account")
+    private List<TransactionHistory> transactions = new ArrayList<>();
 
     public Account(Long id, Long agency, Long digit, BigDecimal balance, String owner, String cpf) {
         this.id = id;
@@ -71,4 +78,6 @@ public class Account {
                 ", cpf='" + cpf + '\'' +
                 '}';
     }
+
+
 }

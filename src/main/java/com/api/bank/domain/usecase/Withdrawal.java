@@ -2,9 +2,10 @@ package com.api.bank.domain.usecase;
 
 import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-
+@Component
 public class Withdrawal {
     private final AccountGateway accountGateway;
 

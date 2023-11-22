@@ -2,10 +2,11 @@ package com.api.bank.domain.usecase;
 
 import com.api.bank.domain.gateway.AccountGateway;
 import com.api.bank.domain.model.Account;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
+@Component
 public class Deposit {
 
     private final AccountGateway accountGateway;
