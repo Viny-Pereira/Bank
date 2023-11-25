@@ -1,11 +1,10 @@
 package com.api.bank.infra.controller;
 
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
 import com.api.bank.domain.model.enuns.TypeAccount;
 import com.api.bank.domain.usecase.Transfer;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -46,9 +45,9 @@ public class AccountController {
 
     @PostMapping("/transfer")
     @Transactional  // Adicione a anotação @Transactional aqui
-    public BigDecimal transferAmount(@RequestParam Long sourceAccountId,
+    public void transferAmount(@RequestParam Long sourceAccountId,
                                      @RequestParam Long targetAccountId,
                                      @RequestParam BigDecimal amount) throws Exception {
-        return transfer.execute(sourceAccountId, targetAccountId, amount);
+        transfer.execute(sourceAccountId, targetAccountId, amount);
     }
 }

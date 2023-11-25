@@ -1,13 +1,11 @@
 package com.api.bank.controller.infra.controller;
 
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cache.annotation.AbstractCachingConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;

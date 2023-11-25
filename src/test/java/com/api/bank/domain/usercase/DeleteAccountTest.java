@@ -1,7 +1,8 @@
 package com.api.bank.domain.usercase;
 
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
+import com.api.bank.domain.model.enuns.TypeAccount;
 import com.api.bank.domain.usecase.DeleteAccount;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +30,7 @@ public class DeleteAccountTest {
     public void deleteAccountSuccessfully() throws Exception {
         // Arrange
         Long accountId = 1231L;
-        Account existingAccount = new Account(1231L, 0002L, 1L,
-                BigDecimal.valueOf(10000), "Ligia", "12312445212");
+        Account existingAccount = new Account(TypeAccount.CC, "Viny", "12312445212");
         when(accountGateway.findById(accountId)).thenReturn(Optional.of(existingAccount));
 
         // Act

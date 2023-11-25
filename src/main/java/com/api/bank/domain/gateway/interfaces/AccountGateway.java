@@ -1,4 +1,4 @@
-package com.api.bank.domain.gateway;
+package com.api.bank.domain.gateway.interfaces;
 
 import com.api.bank.domain.model.Account;
 
@@ -7,10 +7,15 @@ import java.util.Optional;
 
 public interface AccountGateway {
     Account searchByCpf(String cpf);
+
     Optional<Account> findById(Long id);
+
     Account save(Account account);
+
     void delete(Long id);
+
     List<Account> getAll();
+
     Optional<Account> getAccountTransactions(Long accountId);
 }
 

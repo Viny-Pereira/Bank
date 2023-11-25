@@ -1,17 +1,18 @@
 package com.api.bank.infra.gateway.bd;
 
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
-public class AccountRepository implements AccountGateway {
+public class AccountGatewayImpl implements AccountGateway {
     private final SpringAccountRepository springAccountRepository;
 
-    public AccountRepository(SpringAccountRepository springAccountRepository) {
+    public AccountGatewayImpl(SpringAccountRepository springAccountRepository) {
         this.springAccountRepository = springAccountRepository;
     }
 

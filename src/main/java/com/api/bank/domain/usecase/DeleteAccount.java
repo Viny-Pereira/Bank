@@ -1,6 +1,6 @@
 package com.api.bank.domain.usecase;
 
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
 
 import java.util.Optional;

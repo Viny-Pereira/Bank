@@ -1,8 +1,9 @@
 package com.api.bank.domain.usercase;
 
 
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
+import com.api.bank.domain.model.enuns.TypeAccount;
 import com.api.bank.domain.usecase.CreateNewAccount;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,7 @@ public class CreateNewAccountTest {
 
     @Test
     public void throwsExceptionIfUserAlreadyHasAccount() {
-        Account account = new Account(1231L, 0002L, 1L,
-                BigDecimal.valueOf(10000), "Ligia", "12312445212");
+        Account account = new Account(TypeAccount.CC, "Viny", "12312445212");
 
         when(accountGateway.searchByCpf(account.getCpf())).thenReturn(account);
         assertThrows(Exception.class, () -> createNewAccount.execute(account));
@@ -41,18 +41,16 @@ public class CreateNewAccountTest {
 
     @Test
     public void creatNewAccount() throws Exception {
-        Account account = new Account(1231L, 0002L, 1L,
-                BigDecimal.valueOf(10000), "Ligia", "12312445212");
+        Account account = new Account(TypeAccount.CC, "Viny", "12312445212");
+
         when(accountGateway.searchByCpf(account.getCpf())).thenReturn(null);
         when(accountGateway.save(account)).thenReturn(account);
 
         Account newAccount = createNewAccount.execute(account);
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals("Ligia", account.getOwner()),
-                () -> Assertions.assertEquals("12312445212", account.getCpf()),
-                () -> Assertions.assertEquals(1231L, account.getId())
-        );
+                () -> Assertions.assertEquals("Viny", newAccount.getOwner()),
+                () -> Assertions.assertEquals("12312445212", newAccount.getCpf()));
 
         Mockito.verify(accountGateway, Mockito.times(1)).searchByCpf(account.getCpf());
         Mockito.verify(accountGateway, Mockito.times(1)).save(account);

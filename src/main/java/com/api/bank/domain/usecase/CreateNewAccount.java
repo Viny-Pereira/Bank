@@ -1,7 +1,7 @@
 package com.api.bank.domain.usecase;
 
 import com.api.bank.domain.model.Account;
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
 
 public class CreateNewAccount {
     private final AccountGateway accountGateway;
@@ -18,11 +18,7 @@ public class CreateNewAccount {
             // - se possuir vamos lancar uma exception
             throw new Exception("User already has a account ");
         }
-
-        // criar uma nova conta
-        Account newAccount = accountGateway.save(account);
-
-        //return Conta;
-        return newAccount;
+        accountGateway.save(account);
+        return account;
     }
 }

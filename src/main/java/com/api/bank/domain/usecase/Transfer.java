@@ -1,35 +1,61 @@
 package com.api.bank.domain.usecase;
 
-import com.api.bank.domain.gateway.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.AccountGateway;
+import com.api.bank.domain.gateway.interfaces.TransactionGateway;
 import com.api.bank.domain.model.Account;
-import com.api.bank.infra.gateway.bd.AccountRepository;
-import jakarta.transaction.Transactional;
+import com.api.bank.domain.model.Transaction;
+import com.api.bank.domain.model.enuns.TransactionType;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 @Component
 public class Transfer {
     private final AccountGateway repository;
     private final Withdrawal withdrawal;
     private final Deposit deposit;
+    private final TransactionGateway transactionGateway;
 
-    public Transfer(AccountGateway repository, Withdrawal withdrawal, Deposit deposit) {
+    public Transfer(AccountGateway repository, Withdrawal withdrawal, Deposit deposit, TransactionGateway transactionGateway) {
         this.repository = repository;
         this.withdrawal = withdrawal;
         this.deposit = deposit;
+        this.transactionGateway = transactionGateway;
     }
 
     public BigDecimal execute(long idSourceAccount, long idTargetAccount, BigDecimal among) throws Exception {
-        Account source = repository.findById(idSourceAccount).orElseThrow(RuntimeException::new);
-        Account target = repository.findById(idTargetAccount).orElseThrow(RuntimeException::new);
+        Account sourceAccount = repository.findById(idSourceAccount).orElseThrow(RuntimeException::new);
+        Account targetAccount = repository.findById(idTargetAccount).orElseThrow(RuntimeException::new);
 
         if (among.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Operation was not carried out because the transaction value is negative.");
         }
+        // Verificar se a conta existe, , etc.
+        Account sourceExistingAccount = repository.searchByCpf(sourceAccount.getCpf());
+        Account targetExistingAccount = repository.searchByCpf(targetAccount.getCpf());
+        if(sourceExistingAccount != null && targetExistingAccount != null) {
+            // se o saldo é suficiente
+            if (sourceAccount.getBalance().compareTo(among) >= 0){
+                BigDecimal newSourceBalance = sourceAccount.getBalance().subtract(among);
+                BigDecimal newTargetBalance = targetAccount.getBalance().add(among);
+                sourceAccount.setBalance(newSourceBalance);
+                targetAccount.setBalance(newTargetBalance);
+                repository.save(sourceAccount);
+                repository.save(targetAccount);
 
-        withdrawal.execute(source, among);
-        deposit.execute(target, among);
-        return source.getBalance();
+                // Salvar a transação após a transferência
+                Transaction sourceTransaction = new Transaction(sourceAccount.getId(), TransactionType.TRANSFER, among, LocalDateTime.now());
+                Transaction targetTransaction = new Transaction(targetAccount.getId(), TransactionType.TRANSFER, among, LocalDateTime.now());
+                transactionGateway.saveTransaction(sourceTransaction);
+                transactionGateway.saveTransaction(targetTransaction);
+
+            } else {
+                throw new IllegalArgumentException("The balance is lower than the amount you wish to transfer");
+            }
+        } else {
+            throw new IllegalArgumentException("Account not found in our database");
+        }
+
+        return among;
     }
-
 }
