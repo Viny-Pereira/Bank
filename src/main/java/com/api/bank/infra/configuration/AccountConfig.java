@@ -2,6 +2,7 @@ package com.api.bank.infra.configuration;
 
 import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.usecase.CreateNewAccount;
+import com.api.bank.domain.usecase.GetAccountById;
 import com.api.bank.domain.usecase.ListAllAccount;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +13,14 @@ public class AccountConfig {
     public CreateNewAccount createNewAccount(AccountGateway accountGateway) {
         return new CreateNewAccount(accountGateway);
     }
-@Bean
+    @Bean
     public ListAllAccount listAllAccount(AccountGateway accountGateway) {
         return new ListAllAccount(accountGateway);
     }
+    @Bean
+    public GetAccountById getAccountById(AccountGateway accountGateway) {
+        return new GetAccountById(accountGateway);
+    }
 }
+
+

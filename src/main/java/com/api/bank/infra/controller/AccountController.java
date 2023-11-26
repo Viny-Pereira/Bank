@@ -4,6 +4,7 @@ import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
 import com.api.bank.domain.model.enuns.TypeAccount;
 import com.api.bank.domain.usecase.CreateNewAccount;
+import com.api.bank.domain.usecase.GetAccountById;
 import com.api.bank.domain.usecase.ListAllAccount;
 import com.api.bank.domain.usecase.Transfer;
 import jakarta.transaction.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/account")
@@ -22,16 +24,22 @@ public class AccountController {
     private final CreateNewAccount createNewAccount;
     private final Transfer transfer;
     private final ListAllAccount listAllAccount;
+    private final GetAccountById getAccountById;
 
-    public AccountController(CreateNewAccount createNewAccount, Transfer transfer, ListAllAccount listAllAccount) {
+    public AccountController(CreateNewAccount createNewAccount, Transfer transfer, ListAllAccount listAllAccount, GetAccountById getAccountById) {
         this.createNewAccount = createNewAccount;
         this.transfer = transfer;
         this.listAllAccount = listAllAccount;
+        this.getAccountById = getAccountById;
     }
 
     @GetMapping
     public List<Account> getAllAccount(){
         return listAllAccount.execute();
+    }
+    @GetMapping("id")
+    public Optional<Account> getAccountById(@PathVariable Long id){
+        return getAccountById.execute(id);
     }
 
 
