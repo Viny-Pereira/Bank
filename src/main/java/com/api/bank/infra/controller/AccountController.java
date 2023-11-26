@@ -3,10 +3,7 @@ package com.api.bank.infra.controller;
 import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
 import com.api.bank.domain.model.enuns.TypeAccount;
-import com.api.bank.domain.usecase.CreateNewAccount;
-import com.api.bank.domain.usecase.GetAccountById;
-import com.api.bank.domain.usecase.ListAllAccount;
-import com.api.bank.domain.usecase.Transfer;
+import com.api.bank.domain.usecase.*;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -23,12 +20,16 @@ public class AccountController {
 
     private final CreateNewAccount createNewAccount;
     private final Transfer transfer;
+    private final Deposit deposit;
+    private final Withdrawal withdrawal;
     private final ListAllAccount listAllAccount;
     private final GetAccountById getAccountById;
 
-    public AccountController(CreateNewAccount createNewAccount, Transfer transfer, ListAllAccount listAllAccount, GetAccountById getAccountById) {
+    public AccountController(CreateNewAccount createNewAccount, Transfer transfer, Deposit deposit, Withdrawal withdrawal, ListAllAccount listAllAccount, GetAccountById getAccountById) {
         this.createNewAccount = createNewAccount;
         this.transfer = transfer;
+        this.deposit = deposit;
+        this.withdrawal = withdrawal;
         this.listAllAccount = listAllAccount;
         this.getAccountById = getAccountById;
     }
@@ -72,5 +73,37 @@ public class AccountController {
         }
         return ResponseEntity.status(HttpStatus.OK).body("Transfer successful");
 
+    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<String> depositAmount(@RequestParam Long accountId, @RequestParam BigDecimal amount) {
+        try {
+            Account account = getAccountById.execute(accountId).orElse(null);
+            if (account == null) {
+                return ResponseEntity.badRequest().body("Account not found");
+            }
+
+            deposit.execute(account, amount);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Deposit successful");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/withdrawal")
+    public ResponseEntity<String> withdrawalAmount(@RequestParam Long accountId, @RequestParam BigDecimal amount) {
+        try {
+            Account account = getAccountById.execute(accountId).orElse(null);
+            if (account == null) {
+                return ResponseEntity.badRequest().body("Account not found");
+            }
+
+            withdrawal.execute(account, amount);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Withdrawal successful");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
