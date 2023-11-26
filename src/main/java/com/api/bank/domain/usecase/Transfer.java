@@ -24,38 +24,37 @@ public class Transfer {
     }
 
     public BigDecimal execute(long idSourceAccount, long idTargetAccount, BigDecimal among) throws Exception {
-        Account sourceAccount = repository.findById(idSourceAccount).orElseThrow(RuntimeException::new);
-        Account targetAccount = repository.findById(idTargetAccount).orElseThrow(RuntimeException::new);
+        if (among.compareTo(BigDecimal.ZERO) >= 0) {
+            Account sourceAccount = repository.findById(idSourceAccount).orElseThrow(RuntimeException::new);
+            Account targetAccount = repository.findById(idTargetAccount).orElseThrow(RuntimeException::new);
+            if(sourceAccount != null && targetAccount != null) {
+                // se o saldo é suficiente
+                if (sourceAccount.getBalance().compareTo(among) >= 0){
+                    BigDecimal newSourceBalance = sourceAccount.getBalance().subtract(among);
+                    BigDecimal newTargetBalance = targetAccount.getBalance().add(among);
+                    sourceAccount.setBalance(newSourceBalance);
+                    targetAccount.setBalance(newTargetBalance);
+                    repository.save(sourceAccount);
+                    repository.save(targetAccount);
 
-        if (among.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Operation was not carried out because the transaction value is negative.");
-        }
-        // Verificar se a conta existe, , etc.
-        Account sourceExistingAccount = repository.searchByCpf(sourceAccount.getCpf());
-        Account targetExistingAccount = repository.searchByCpf(targetAccount.getCpf());
-        if(sourceExistingAccount != null && targetExistingAccount != null) {
-            // se o saldo é suficiente
-            if (sourceAccount.getBalance().compareTo(among) >= 0){
-                BigDecimal newSourceBalance = sourceAccount.getBalance().subtract(among);
-                BigDecimal newTargetBalance = targetAccount.getBalance().add(among);
-                sourceAccount.setBalance(newSourceBalance);
-                targetAccount.setBalance(newTargetBalance);
-                repository.save(sourceAccount);
-                repository.save(targetAccount);
+                    // Salvar a transação após a transferência
+                    Transaction sourceTransaction = new Transaction(sourceAccount.getId(), TransactionType.TRANSFER, among, LocalDateTime.now());
+                    Transaction targetTransaction = new Transaction(targetAccount.getId(), TransactionType.TRANSFER, among, LocalDateTime.now());
+                    transactionGateway.saveTransaction(sourceTransaction);
+                    transactionGateway.saveTransaction(targetTransaction);
+                    return among;
 
-                // Salvar a transação após a transferência
-                Transaction sourceTransaction = new Transaction(sourceAccount.getId(), TransactionType.TRANSFER, among, LocalDateTime.now());
-                Transaction targetTransaction = new Transaction(targetAccount.getId(), TransactionType.TRANSFER, among, LocalDateTime.now());
-                transactionGateway.saveTransaction(sourceTransaction);
-                transactionGateway.saveTransaction(targetTransaction);
-
+                } else {
+                    throw new IllegalArgumentException("The balance is lower than the amount you wish to transfer");
+                }
             } else {
-                throw new IllegalArgumentException("The balance is lower than the amount you wish to transfer");
+                throw new IllegalArgumentException("Account not found in our database");
             }
-        } else {
-            throw new IllegalArgumentException("Account not found in our database");
+        }else{
+            throw new Exception("Operation was not carried out because the transaction value is negative.");
         }
 
-        return among;
+
+
     }
 }

@@ -31,4 +31,5 @@ public class Account {
         this.owner = owner;
         this.cpf = cpf;
     }
+
 }
