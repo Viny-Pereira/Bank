@@ -20,13 +20,31 @@ public class CreateNewAccountTest {
     @Autowired
     private AccountGateway accountGateway;
     @Test
-    public void testAccountCreation() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/account")
+    public void succeedCreateAccount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/account")
                         .param("typeAccount", "CC")
                         .param("name", "John Doe")
                         .param("cpf", "12345678901"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isCreated());
 
+        Account account = accountGateway.searchByCpf("12345678901");
+        assertNotNull(account);
+    }
+    @Test
+    public void unsucceedCreateAccountAlreadyExist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/account")
+                        .param("typeAccount", "CC")
+                        .param("name", "John Doe")
+                        .param("cpf", "12345678901"));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/account")
+                        .param("typeAccount", "CC")
+                        .param("name", "John Doe")
+                        .param("cpf", "12345678901"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
         Account account = accountGateway.searchByCpf("12345678901");
         assertNotNull(account);
     }
