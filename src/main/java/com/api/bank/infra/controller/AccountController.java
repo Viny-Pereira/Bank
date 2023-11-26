@@ -82,9 +82,7 @@ public class AccountController {
             if (account == null) {
                 return ResponseEntity.badRequest().body("Account not found");
             }
-
             deposit.execute(account, amount);
-
             return ResponseEntity.status(HttpStatus.OK).body("Deposit successful");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
