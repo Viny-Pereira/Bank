@@ -4,6 +4,7 @@ import com.api.bank.domain.gateway.interfaces.AccountGateway;
 import com.api.bank.domain.model.Account;
 import com.api.bank.domain.model.enuns.TypeAccount;
 import com.api.bank.domain.usecase.DeleteAccount;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,9 +46,10 @@ public class DeleteAccountTest {
         // Arrange
         Long nonExistingAccountId = 456L;
 
-        when(accountGateway.findById(nonExistingAccountId)).thenReturn(null);
+        when(accountGateway.findById(nonExistingAccountId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(NullPointerException.class, () -> deleteAccount.delete(nonExistingAccountId));
+        Throwable throwable = assertThrows(NullPointerException.class, () -> deleteAccount.delete(nonExistingAccountId));
+        Assertions.assertEquals("Account not found", throwable.getMessage());
     }
 }

@@ -28,14 +28,8 @@ public class AccountGatewayImpl implements AccountGateway {
 
     @Override
     public Account save(Account account) {
-        if (account.getId()==null){
-            springAccountRepository.save(account);
-            return account;
-        } else{
-            springAccountRepository.save(account);
-            return account;
-
-        }
+        springAccountRepository.save(account);
+        return account;
     }
 
     @Override
@@ -49,8 +43,4 @@ public class AccountGatewayImpl implements AccountGateway {
         return springAccountRepository.findAll();
     }
 
-    @Override
-    public Optional<Account> getAccountTransactions(Long accountId) {
-        return springAccountRepository.findById(accountId);
-    }
 }

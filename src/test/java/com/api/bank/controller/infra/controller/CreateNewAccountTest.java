@@ -11,6 +11,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -21,31 +24,31 @@ public class CreateNewAccountTest {
     private AccountGateway accountGateway;
     @Test
     public void succeedCreateAccount() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/account")
+        mockMvc.perform(post("/account")
                         .param("typeAccount", "CC")
                         .param("name", "John Doe")
-                        .param("cpf", "12345678901"))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                        .param("cpf", "1251481351310"))
+                .andExpect(status().isCreated());
 
-        Account account = accountGateway.searchByCpf("12345678901");
+        Account account = accountGateway.searchByCpf("1251481351310");
         assertNotNull(account);
     }
     @Test
     public void unsucceedCreateAccountAlreadyExist() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/account")
+        mockMvc.perform(post("/account")
                         .param("typeAccount", "CC")
                         .param("name", "John Doe")
                         .param("cpf", "12345678901"));
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/account")
+        mockMvc.perform(post("/account")
                         .param("typeAccount", "CC")
                         .param("name", "John Doe")
                         .param("cpf", "12345678901"))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(status().isBadRequest());
         Account account = accountGateway.searchByCpf("12345678901");
         assertNotNull(account);
     }
+
+
+
 }

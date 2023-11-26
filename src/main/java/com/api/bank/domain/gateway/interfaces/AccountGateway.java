@@ -16,6 +16,5 @@ public interface AccountGateway {
 
     List<Account> getAll();
 
-    Optional<Account> getAccountTransactions(Long accountId);
 }
 

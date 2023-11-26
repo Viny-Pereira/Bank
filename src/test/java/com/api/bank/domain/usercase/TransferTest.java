@@ -33,10 +33,8 @@ public class TransferTest {
     private AccountGateway accountGateway;
     @Mock
     private Withdrawal withdrawal;
-
     @Mock
     private Deposit deposit;
-
     @InjectMocks
     private Transfer transfer;
 
@@ -66,6 +64,9 @@ public class TransferTest {
         when(accountGateway.findById(targetAccountId)).thenReturn(Optional.of(targetAccount));
         Transaction sourceTransaction = new Transaction(sourceAccount.getId(), TransactionType.TRANSFER, amount, LocalDateTime.now());
         Transaction targetTransaction = new Transaction(sourceAccount.getId(), TransactionType.TRANSFER, amount, LocalDateTime.now());
+        BigDecimal newAmount = BigDecimal.valueOf(500.00);
+
+        targetTransaction.setAmount(newAmount);
         transactionGateway.saveTransaction(sourceTransaction);
         transactionGateway.saveTransaction(targetTransaction);
         // then
@@ -101,6 +102,25 @@ public class TransferTest {
 
         Throwable throwable = assertThrows(Exception.class, () -> transfer.execute(sourceAccountId, targetAccountId, negativeAmount));
         assertEquals("Operation was not carried out because the transaction value is negative.", throwable.getMessage());
+        // Verifica que os métodos de withdrawal e deposit não foram chamados
+        verify(withdrawal, never()).execute(any(), any());
+        verify(deposit, never()).execute(any(), any());
+    }
+
+    @Test
+    public void throwExceptionAccountNotFound() throws Exception {
+        // Arrange
+        long nonExistingAccountId = 999L;
+        long targetAccountId = 2L;
+        BigDecimal amount = BigDecimal.valueOf(500.00);
+
+        // when
+        when(accountGateway.findById(nonExistingAccountId)).thenReturn(Optional.empty());
+
+        // then
+        Throwable throwable = assertThrows(IllegalArgumentException.class, () -> transfer.execute(nonExistingAccountId, targetAccountId, amount));
+        assertEquals("Account not found in our database", throwable.getMessage());
+
         // Verifica que os métodos de withdrawal e deposit não foram chamados
         verify(withdrawal, never()).execute(any(), any());
         verify(deposit, never()).execute(any(), any());

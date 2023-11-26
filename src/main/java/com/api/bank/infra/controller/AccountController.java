@@ -19,21 +19,14 @@ import java.util.List;
 @RequestMapping("/account")
 public class AccountController {
 
-    private final AccountGateway accountRepository;
     private final CreateNewAccount createNewAccount;
     private final Transfer transfer;
     private final ListAllAccount listAllAccount;
 
-    public AccountController(AccountGateway accountRepository, CreateNewAccount createNewAccount, Transfer transfer, ListAllAccount listAllAccount) {
-        this.accountRepository = accountRepository;
+    public AccountController(CreateNewAccount createNewAccount, Transfer transfer, ListAllAccount listAllAccount) {
         this.createNewAccount = createNewAccount;
         this.transfer = transfer;
         this.listAllAccount = listAllAccount;
-    }
-
-    @GetMapping("{id}")
-    public Account getAccount(@PathVariable Long id){
-        return accountRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @GetMapping
@@ -43,7 +36,7 @@ public class AccountController {
 
 
     @PostMapping
-    public ResponseEntity<String> ResponseEntity (@RequestParam TypeAccount typeAccount,
+    public ResponseEntity<String> CreatAccount (@RequestParam TypeAccount typeAccount,
                                                   @RequestParam String name,
                                                   @RequestParam String cpf
     ) {
@@ -54,16 +47,22 @@ public class AccountController {
         }
 
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(accountRepository.toString());
+        return ResponseEntity.status(HttpStatus.CREATED).body("Account created successfully");
     }
 
 
 
     @PostMapping("/transfer")
     @Transactional  // Adicione a anotação @Transactional aqui
-    public void transferAmount(@RequestParam Long sourceAccountId,
+    public ResponseEntity<String> transferAmount(@RequestParam Long sourceAccountId,
                                      @RequestParam Long targetAccountId,
-                                     @RequestParam BigDecimal amount) throws Exception {
-        transfer.execute(sourceAccountId, targetAccountId, amount);
+                                     @RequestParam BigDecimal amount) {
+        try{
+            transfer.execute(sourceAccountId, targetAccountId, amount);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Transfer successful");
+
     }
 }

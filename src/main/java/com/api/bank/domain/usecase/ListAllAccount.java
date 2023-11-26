@@ -9,6 +9,7 @@ public class ListAllAccount {
     private final AccountGateway accountGateway;
 
     public ListAllAccount(AccountGateway accountGateway) {
+
         this.accountGateway = accountGateway;
     }
 

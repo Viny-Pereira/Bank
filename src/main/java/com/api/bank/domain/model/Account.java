@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 
 @Entity(name = "account")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "account")
@@ -27,9 +26,20 @@ public class Account {
     private BigDecimal balance;
 
     public Account(TypeAccount typeAccount, String owner, String cpf) {
+        this.balance = new BigDecimal(0);
         this.typeAccount = typeAccount;
         this.owner = owner;
         this.cpf = cpf;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", typeAccount=" + typeAccount +
+                ", owner='" + owner + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", balance=" + balance +
+                '}';
+    }
 }

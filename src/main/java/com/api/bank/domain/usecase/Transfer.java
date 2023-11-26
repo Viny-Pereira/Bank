@@ -12,21 +12,17 @@ import java.time.LocalDateTime;
 @Component
 public class Transfer {
     private final AccountGateway repository;
-    private final Withdrawal withdrawal;
-    private final Deposit deposit;
     private final TransactionGateway transactionGateway;
 
-    public Transfer(AccountGateway repository, Withdrawal withdrawal, Deposit deposit, TransactionGateway transactionGateway) {
+    public Transfer(AccountGateway repository, TransactionGateway transactionGateway) {
         this.repository = repository;
-        this.withdrawal = withdrawal;
-        this.deposit = deposit;
         this.transactionGateway = transactionGateway;
     }
 
     public BigDecimal execute(long idSourceAccount, long idTargetAccount, BigDecimal among) throws Exception {
         if (among.compareTo(BigDecimal.ZERO) >= 0) {
-            Account sourceAccount = repository.findById(idSourceAccount).orElseThrow(RuntimeException::new);
-            Account targetAccount = repository.findById(idTargetAccount).orElseThrow(RuntimeException::new);
+            Account sourceAccount = repository.findById(idSourceAccount).orElseThrow(() -> new IllegalArgumentException("Account not found in our database"));
+            Account targetAccount = repository.findById(idTargetAccount).orElseThrow(() -> new IllegalArgumentException("Account not found in our database"));
             if(sourceAccount != null && targetAccount != null) {
                 // se o saldo é suficiente
                 if (sourceAccount.getBalance().compareTo(among) >= 0){
@@ -47,14 +43,12 @@ public class Transfer {
                 } else {
                     throw new IllegalArgumentException("The balance is lower than the amount you wish to transfer");
                 }
-            } else {
-                throw new IllegalArgumentException("Account not found in our database");
             }
         }else{
             throw new Exception("Operation was not carried out because the transaction value is negative.");
         }
 
 
-
+        return among;
     }
 }
