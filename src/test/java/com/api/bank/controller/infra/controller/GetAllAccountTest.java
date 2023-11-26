@@ -49,9 +49,9 @@ public class GetAllAccountTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].owner").value("Viny"))
                 .andExpect(jsonPath("$[0].cpf").value("10451001200"))
-                .andExpect(jsonPath("$[0].balance").value(0))
+                .andExpect(jsonPath("$[0].balance").value(1000))
                 .andExpect(jsonPath("$[1].owner").value("Maria"))
                 .andExpect(jsonPath("$[1].cpf").value("10451001401"))
-                .andExpect(jsonPath("$[1].balance").value(0));
+                .andExpect(jsonPath("$[1].balance").value(1000));
     }
 }
