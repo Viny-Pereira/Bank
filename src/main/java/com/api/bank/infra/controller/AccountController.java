@@ -37,7 +37,7 @@ public class AccountController {
     public List<Account> getAllAccount(){
         return listAllAccount.execute();
     }
-    @GetMapping("id")
+    @GetMapping({"id"})
     public Optional<Account> getAccountById(@PathVariable Long id){
         return getAccountById.execute(id);
     }

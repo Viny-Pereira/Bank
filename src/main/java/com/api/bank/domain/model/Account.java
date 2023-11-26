@@ -26,7 +26,7 @@ public class Account {
     private BigDecimal balance;
 
     public Account(TypeAccount typeAccount, String owner, String cpf) {
-        this.balance = new BigDecimal(0);
+        this.balance = new BigDecimal(1000);
         this.typeAccount = typeAccount;
         this.owner = owner;
         this.cpf = cpf;
