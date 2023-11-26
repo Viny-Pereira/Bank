@@ -1,5 +1,8 @@
 # Spring Bank API
 
+![image](https://github.com/Viny-Pereira/bank/assets/121204240/2b46b236-6e23-4860-a312-c764f0e14a3d)
+
+
 Spring Bank API é uma simples RESTful API construída usando Spring Boot usando como base de dados o H2, que permite aos usuários realizar várias operações bancárias, como criar uma conta, fazer um depósito, fazer um saque e transferir dinheiro entre contas.
 
 ## Features
