@@ -32,14 +32,5 @@ public class Account {
         this.cpf = cpf;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", typeAccount=" + typeAccount +
-                ", owner='" + owner + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", balance=" + balance +
-                '}';
-    }
+
 }

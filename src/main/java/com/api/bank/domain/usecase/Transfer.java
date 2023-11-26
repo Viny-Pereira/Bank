@@ -38,7 +38,6 @@ public class Transfer {
                     Transaction targetTransaction = new Transaction(targetAccount.getId(), TransactionType.TRANSFER, among, LocalDateTime.now());
                     transactionGateway.saveTransaction(sourceTransaction);
                     transactionGateway.saveTransaction(targetTransaction);
-                    return among;
 
                 } else {
                     throw new IllegalArgumentException("The balance is lower than the amount you wish to transfer");

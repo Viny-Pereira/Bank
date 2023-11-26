@@ -58,9 +58,9 @@ public class TransactionTest {
         doReturn(Optional.of(sourceAccount)).when(repository).findById(sourceAccountId);
         doReturn(Optional.of(targetAccount)).when(repository).findById(targetAccountId);
 
-        transfer.execute(sourceAccountId, targetAccountId, amount);
+        var result = transfer.execute(sourceAccountId, targetAccountId, amount);
         ResponseEntity<String> response = accountController.transferAmount(sourceAccountId, targetAccountId, amount);
-
+        assertEquals(amount, result);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         assertEquals(new BigDecimal(900), sourceAccount.getBalance());
